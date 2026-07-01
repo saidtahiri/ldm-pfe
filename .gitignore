@@ -1,0 +1,26 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local environments and secrets
+.env
+.venv/
+venv/
+env/
+.streamlit/secrets.toml
+
+# Large local datasets
+data/
+
+# Duplicate training snapshots; keep *_best.pt checkpoints for the demo
+models/**/*_last.pt
+
+# Generated temporary/export files
+tmp/
+output/

@@ -1,0 +1,49 @@
+from pathlib import Path
+
+SEED = 42
+
+BASE_DIR = Path(".")
+DATA_DIR = BASE_DIR / "data" / "raw" / "chest_xray"
+
+OUTPUT_DIR = BASE_DIR / "outputs"
+METRICS_DIR = OUTPUT_DIR / "metrics"
+FIGURES_DIR = OUTPUT_DIR / "figures"
+RECON_DIR = OUTPUT_DIR / "reconstructions"
+SAMPLES_DIR = OUTPUT_DIR / "ldm_samples"
+CLASSIF_DIR = OUTPUT_DIR / "classification"
+
+MODEL_DIR = BASE_DIR / "models"
+AE_DIR = MODEL_DIR / "autoencoder"
+DIFF_DIR = MODEL_DIR / "diffusion"
+CLASSIFIER_DIR = MODEL_DIR / "classifier"
+
+IMAGE_SIZE = (128, 128)
+IN_CHANNELS = 1
+LATENT_CHANNELS = 3
+LATENT_SIZE = (32, 32)
+
+# --- Hyperparamètres ajustés dynamiquement via l'interface ---
+AE_BATCH_SIZE = 4
+AE_EPOCHS = 60
+AE_LR = 0.0001 
+AE_BETA_KL = 1e-05
+
+DIFF_BATCH_SIZE = 8
+DIFF_EPOCHS = 120
+DIFF_LR = 0.00005
+DDPM_TIMESTEPS = 1000
+DDPM_INFERENCE_STEPS = 100
+
+CLASSIFIER_BATCH_SIZE = 16
+CLASSIFIER_EPOCHS = 30
+CLASSIFIER_LR = 0.0002
+
+NUM_SYNTHETIC_NORMAL = 50
+NUM_SYNTHETIC_PNEUMONIA = 50
+MAX_QUALITY_EVAL_IMAGES = 64
+
+for directory in [
+    OUTPUT_DIR, METRICS_DIR, FIGURES_DIR, RECON_DIR, SAMPLES_DIR,
+    CLASSIF_DIR, MODEL_DIR, AE_DIR, DIFF_DIR, CLASSIFIER_DIR
+]:
+    directory.mkdir(parents=True, exist_ok=True)

@@ -1,0 +1,4 @@
+metric,value
+mse_reconstruction_mean,0.001392808512719057
+ssim_reconstruction_mean,0.8615371191160005
+frechet_simple_feature_distance,0.07501487158132801
