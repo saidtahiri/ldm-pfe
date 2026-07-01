@@ -18,15 +18,10 @@ import configs.ldm_config as ldm_config
 importlib.reload(ldm_config)
 from configs import ldm_config  # Force la mise à jour des variables dans tout le script
 
-from src.ldm_dataset import get_dataloader, summarize_dataset
-from src.utils_common import set_seed
-
 st.set_page_config(
     page_title="Dashboard LDM - Supervision Académique",
     layout="wide",
 )
-
-set_seed(42)
 
 
 def dataset_source_disponible() -> bool:
@@ -327,7 +322,7 @@ with tab_pilote:
     )
     with st.expander("💡 Explication simplifiée - Phase 3"):
         st.info("**La génération de nouvelles instances :** En partant d'un bruit aléatoire, le modèle applique le processus inverse appris pour matérialiser de nouvelles radiographies thoraciques totalement inédites, qui n'appartiennent à aucun patient réel.")
-    if st.button("▶️ Exécuter l'échantillonnage de l'espace latent (Sampling)"):
+    if st.button("▶️ Exécuter l'échantillonnage de l'espace latent (Sampling)", disabled=not DATASET_SOURCE_DISPONIBLE):
         executer_script("sample_latent_diffusion.py", "Inférence DDPM & Échantillonnage")
         
     st.markdown("---")
@@ -379,7 +374,7 @@ with tab_pilote:
     )
     with st.expander("💡 Explication simplifiée - Phase 7"):
         st.info("**La confrontation finale :** Analyse comparative des performances des deux classifieurs afin de valider si l'intégration des données générées par le modèle améliore la détection des pathologies.")
-    if st.button("▶️ Générer l'évaluation comparative finale"):
+    if st.button("▶️ Générer l'évaluation comparative finale", disabled=not DATASET_SOURCE_DISPONIBLE):
         executer_script("evaluate_classifier.py", "Analyse Comparative S1 vs S2")
 
 # ==========================================
@@ -406,6 +401,8 @@ with tab_dataset:
         disabled=not DATASET_SOURCE_DISPONIBLE,
     ):
         try:
+            from src.ldm_dataset import summarize_dataset
+
             summary = summarize_dataset()
             st.success("Manifest statistique mis à jour.")
             st.dataframe(summary, width="stretch")
@@ -425,6 +422,8 @@ with tab_dataset:
         batch_size_slider = st.slider("Dimension du mini-batch ($N$ images)", 1, 8, 4)
         if st.button("Charger et inspecter un mini-batch aléatoire"):
             try:
+                from src.ldm_dataset import get_dataloader
+
                 loader = get_dataloader(split="train", batch_size=batch_size_slider, shuffle=True, num_workers=0)
                 batch = next(iter(loader))
                 images, labels, paths = batch["image"], batch["label"], batch["path"]
